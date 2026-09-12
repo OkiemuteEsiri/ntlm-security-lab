@@ -1,0 +1,32 @@
+[
+  {
+    "finding_id": "NTLM-DEMO-VALIDATED",
+    "owner": "Identity Engineering",
+    "change_reference": "CHG-SYN-1042",
+    "implemented_control": "Application path migrated to Kerberos and SMB signing required",
+    "retest_completed": true,
+    "retest_protocol": "Kerberos",
+    "validation_passed": true,
+    "validator": "Security Assurance"
+  },
+  {
+    "finding_id": "NTLM-DEMO-FAILED",
+    "owner": "Platform Operations",
+    "change_reference": "CHG-SYN-1043",
+    "implemented_control": "Legacy client configuration updated",
+    "retest_completed": true,
+    "retest_protocol": "NTLMv1",
+    "validation_passed": false,
+    "validator": "Security Assurance"
+  },
+  {
+    "finding_id": "NTLM-DEMO-INCOMPLETE",
+    "owner": "Application Team",
+    "change_reference": "",
+    "implemented_control": "Migration planned",
+    "retest_completed": false,
+    "retest_protocol": "",
+    "validation_passed": false,
+    "validator": ""
+  }
+]

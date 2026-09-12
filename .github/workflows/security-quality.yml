@@ -1,0 +1,40 @@
+name: security-quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m compileall src tests
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Generate synthetic assessment
+        run: python -m src.cli data/auth_events.json --output reports/generated-assessment.md
+      - name: Validate report content
+        run: |
+          grep -q 'MITRE ATT&CK' reports/generated-assessment.md
+          grep -q 'T1557.001' reports/generated-assessment.md
+          grep -q 'NTLMv1 exposure' reports/generated-assessment.md
+      - name: Validate remediation evidence
+        run: |
+          python - <<'PY'
+          from src.remediation import load_and_validate
+          results = load_and_validate('data/remediation_evidence.json')
+          states = {r.status for r in results}
+          assert {'validated', 'invalid_closure', 'needs_evidence'} <= states
+          print([(r.finding_id, r.status) for r in results])
+          PY
